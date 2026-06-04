@@ -1,0 +1,153 @@
+.container {
+  width: 350px;
+  min-height: 400px;
+  padding: 20px;
+  background-color: #f8fafc;
+  font-family: system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.title {
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.uploadSection {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.uploadButton {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.uploadButton:hover {
+  background-color: #1d4ed8;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.previewSection {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.textArea {
+  width: 100%;
+  flex-grow: 1;
+  min-height: 200px;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #334155;
+  background-color: white;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+/* Ensure perfect responsiveness for windows or larger screens */
+@media (min-width: 600px) {
+  .container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .textArea {
+    font-size: 0.9rem;
+    min-height: 300px;
+  }
+}
+
+.statusText {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.jsonPreview {
+  width: 100%;
+  flex-grow: 1;
+  background-color: #1e293b;
+  color: #38bdf8;
+  padding: 15px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  overflow-y: auto;
+  max-height: 250px;
+  box-sizing: border-box;
+}
+.autofillButton {
+  background-color: #10b981; /* A nice green color for action */
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  margin-top: 15px;
+  transition: background-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.autofillButton:hover {
+  background-color: #059669;
+}
+.memorySection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  background-color: #f1f5f9;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+}
+
+.clearButton {
+  background-color: #ef4444;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+.clearButton:hover {
+  background-color: #dc2626;
+}

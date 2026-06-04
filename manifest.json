@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Workday AI Autofiller",
+  "version": "1.0.0",
+  "description": "AI-powered job application filler",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.myworkdayjobs.com/*"],
+      "js": ["src/content.js"]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.myworkdayjobs.com/*",
+    "https://generativelanguage.googleapis.com/*"
+  ]
+}
