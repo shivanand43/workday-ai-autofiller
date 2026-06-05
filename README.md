@@ -429,3 +429,8 @@ This project focuses on reducing candidate effort and improving job application 
 ## Resume Upload & Autofill Process
 ![Resume Upload](./public/Chrome%20Extension1.png)
 ---
+## 🎥 Demo Video
+
+Watch the project demo here:
+
+[▶️ Click Here to Watch Demo Video](https://drive.google.com/file/d/1BLnoPIOmfGQvIFcf3bzlyrRnnROOZCSg/view?usp=sharing)
