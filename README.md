@@ -408,37 +408,6 @@ Fields automatically populate.
 
 ---
 
-1. The "Popup Amnesia" Problem (State Management)
-The Problem: Chrome aggressively saves memory by destroying extension popups the second a user clicks away. When navigating from Step 1 to Step 2 of the Workday form, the extension would "forget" the uploaded resume, forcing the user to upload it repeatedly.
-
-The Solution: Implemented browser-level state management using chrome.storage.local. The App.jsx component was updated to immediately save the parsed JSON data to local storage and retrieve it on subsequent opens, allowing seamless multi-step navigation with a single upload.
-
-2. Complex Field Automation (Dropdowns & Radio Buttons)
-The Problem: The initial content script relied on static keyword matching (e.g., matching "First Name" to the name field). This failed on Step 3 of Workday applications, which features dynamic, company-specific custom questions via dropdowns and radio buttons (e.g., "Do you require visa sponsorship?").
-
-The Solution: Upgraded the architecture to a Dynamic AI Mapping Loop. The content.js script was rewritten to scrape all unknown questions and their dropdown options from the page. This array of fields is sent to the background worker, where the Gemini AI compares the questions against the resume data and mathematically determines the correct option to select.
-
-3. AI Hallucinations & JSON Syntax Errors
-The Problem: Even with strict prompting, the AI model occasionally returned invalid JSON formatting. It would wrap the data in Markdown backticks (```json) or include conversational text/comments, causing JSON.parse() to throw fatal syntax errors and crash the autofill process.
-
-The Solution: Built an aggressive fallback parser (extractValidJSON) inside background.js. Instead of trusting the raw string, the code programmatically calculates the indexOf('{') and lastIndexOf('}') to forcefully extract only the pure JSON payload, ignoring any extra characters the AI injected.
-
-4. React Framework vs. DOM Manipulation Events
-The Problem: The extension successfully injected text into the Workday input fields visually, but when the user clicked "Next", Workday threw an error claiming the fields were empty. Workday uses React, which does not register standard JavaScript input.value = "text" injections.
-
-The Solution: Simulated human keystrokes by programmatically dispatching synthetic React DOM events. After injecting a value, the script fires new Event('input'), new Event('change'), and new Event('blur') with { bubbles: true } so the underlying framework registers the data change.
-
-5. Vite CORS & Manifest V3 Security Blocks
-The Problem: During local development, the Chrome Extension service worker was blocked from communicating with the Vite local development server (localhost:5173) due to strict Cross-Origin Resource Sharing (CORS) security policies.
-
-The Solution: Created a custom vite.config.js file overriding the default server configuration, explicitly enabling cors: true and mapping a strictPort to allow the HMR (Hot Module Replacement) websocket to connect cleanly to Manifest V3.
-
-6. API Rate Limiting (Error 429)
-The Problem: The application suddenly halted with a RESOURCE_EXHAUSTED (429) error. The project was utilizing the gemini-2.5-flash model, which hit a strict free-tier quota limit of 20 requests per day during heavy testing.
-
-The Solution: Implemented graceful error handling in the UI to alert the user of quota limits. To continue development, the API endpoint was successfully hot-swapped to the gemini-1.5-flash model, which provides a significantly higher free limit of 1,500 requests per day while maintaining sufficient intelligence for the data extraction tasks.
-
-
 ---
 
 # 🚀 Future Improvements
