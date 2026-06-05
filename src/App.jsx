@@ -1,88 +1,3 @@
-// import { useState } from 'react';
-// import { extractTextFromPDF } from './pdfParser';
-// import styles from './App.module.css';
-
-// function App() {
-//   const [resumeData, setResumeData] = useState(null);
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [statusMessage, setStatusMessage] = useState('');
-
-//   const handleFileUpload = async (event) => {
-//     const file = event.target.files[0];
-//     if (!file) return;
-
-//     if (file.type !== 'application/pdf') {
-//       alert("Please upload a PDF file.");
-//       return;
-//     }
-
-//     setIsLoading(true);
-//     setResumeData(null);
-//     setStatusMessage('Reading PDF...');
-
-//     try {
-//       // 1. Extract the text
-//       const rawText = await extractTextFromPDF(file);
-      
-//       // 2. Send it to the background worker for AI processing
-//       setStatusMessage('Analyzing with AI...');
-      
-//       // We use chrome.runtime.sendMessage to talk to background.js
-//       chrome.runtime.sendMessage(
-//         { action: "parseResume", text: rawText }, 
-//         (response) => {
-//           if (response && response.success) {
-//             setResumeData(response.data);
-//             setStatusMessage('Resume processed successfully!');
-//           } else {
-//             console.error(response?.error);
-//             setStatusMessage('AI processing failed.');
-//           }
-//           setIsLoading(false);
-//         }
-//       );
-
-//     } catch (error) {
-//       console.error(error);
-//       setStatusMessage("Failed to read the PDF.");
-//       setIsLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className={styles.container}>
-//       <h1 className={styles.title}>Workday AI Autofiller</h1>
-      
-//       <div className={styles.uploadSection}>
-//         <label className={styles.uploadButton} style={{ opacity: isLoading ? 0.7 : 1 }}>
-//           {isLoading ? "Processing..." : "Upload Resume (PDF)"}
-//           <input 
-//             type="file" 
-//             accept=".pdf" 
-//             onChange={handleFileUpload} 
-//             className={styles.hiddenInput}
-//             disabled={isLoading}
-//           />
-//         </label>
-//       </div>
-
-//       <p className={styles.statusText}>{statusMessage}</p>
-
-//       {/* If we have structured AI data, we show it neatly here */}
-//       {resumeData && (
-//         <div className={styles.previewSection}>
-//           <h2 className={styles.subtitle}>Structured AI Data:</h2>
-//           <pre className={styles.jsonPreview}>
-//             {JSON.stringify(resumeData, null, 2)}
-//           </pre>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
-
 import { useState, useEffect } from 'react';
 import { extractTextFromPDF } from './pdfParser';
 import styles from './App.module.css';
@@ -92,7 +7,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
 
-  // NEW: When the popup opens, check if we already saved a resume!
+  // When the popup opens, check if we already saved a resume!
   useEffect(() => {
     chrome.storage.local.get(['savedResume'], (result) => {
       if (result.savedResume) {
@@ -122,7 +37,7 @@ function App() {
             setResumeData(data);
             setStatusMessage('Resume processed successfully!');
             
-            // NEW: Save the AI data to Chrome's permanent memory
+            // Save the AI data to Chrome's permanent memory
             chrome.storage.local.set({ savedResume: data });
           } else {
             setStatusMessage('AI processing failed.');
@@ -144,17 +59,49 @@ function App() {
       return;
     }
 
+    // Attempt 1: Try to send the message normally
     chrome.tabs.sendMessage(tab.id, { 
       action: "autofillForm", 
       resumeData: resumeData 
     }, (response) => {
+      
+      // SELF-HEALING LOGIC: If Chrome says the connection is dead (because of a reload)
+      if (chrome.runtime.lastError) {
+        console.log("Connection dead. Force-injecting the content script...");
+        
+        // Forcefully inject the spy script into the current Workday tab
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ["src/content.js"]
+        }).then(() => {
+          
+          // Attempt 2: Now that it is injected, try sending the message again!
+          chrome.tabs.sendMessage(tab.id, { 
+            action: "autofillForm", 
+            resumeData: resumeData 
+          }, (retryResponse) => {
+            if (retryResponse && retryResponse.success) {
+              alert("Autofill complete! Review your fields.");
+            } else {
+              alert("Autofill mapping failed or no fields found.");
+            }
+          });
+          
+        }).catch(err => {
+          console.error("Force injection failed:", err);
+          alert("Chrome security blocked the action. Please press F5 to refresh the Workday page once.");
+        });
+        
+        return;
+      }
+
+      // If Attempt 1 worked perfectly
       if (response && response.success) {
         alert("Autofill complete! Review your fields.");
       }
     });
   };
 
-  // NEW: Allow the user to delete the saved resume to upload a new one
   const handleClearData = () => {
     chrome.storage.local.remove(['savedResume'], () => {
       setResumeData(null);
