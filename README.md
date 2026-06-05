@@ -407,7 +407,7 @@ Expected Result:
 Fields automatically populate.
 
 ---
-```
+
 1. The "Popup Amnesia" Problem (State Management)
 The Problem: Chrome aggressively saves memory by destroying extension popups the second a user clicks away. When navigating from Step 1 to Step 2 of the Workday form, the extension would "forget" the uploaded resume, forcing the user to upload it repeatedly.
 
@@ -438,7 +438,7 @@ The Problem: The application suddenly halted with a RESOURCE_EXHAUSTED (429) err
 
 The Solution: Implemented graceful error handling in the UI to alert the user of quota limits. To continue development, the API endpoint was successfully hot-swapped to the gemini-1.5-flash model, which provides a significantly higher free limit of 1,500 requests per day while maintaining sufficient intelligence for the data extraction tasks.
 
-```
+
 ---
 
 # 🚀 Future Improvements
