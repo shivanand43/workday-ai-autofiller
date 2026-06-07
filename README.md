@@ -433,4 +433,4 @@ This project focuses on reducing candidate effort and improving job application 
 
 Watch the project demo here:
 
-[▶️ Click Here to Watch Demo Video](https://drive.google.com/file/d/1BLnoPIOmfGQvIFcf3bzlyrRnnROOZCSg/view?usp=sharing)
+[▶️ Click Here to Watch Demo Video](https://docs.google.com/videos/d/1CXgQon6prDByj6sBG6fOK34hZu1zy2_VomwYJjgorWM/edit?usp=sharing)

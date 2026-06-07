@@ -69,8 +69,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               targetEl.value = matchingOption.value;
             }
           } else if (targetEl.type === 'checkbox' || targetEl.getAttribute('role') === 'checkbox') {
-            targetEl.checked = valueToFill === true;
-          } else if (targetEl.type === 'radio' || targetEl.getAttribute('role') === 'radio') {
+            if (valueToFill === true) {
+              targetEl.click();
+            }        
+            } else if (targetEl.type === 'radio' || targetEl.getAttribute('role') === 'radio') {
              targetEl.click(); 
           } else {
             targetEl.value = valueToFill;
