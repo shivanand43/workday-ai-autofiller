@@ -6,7 +6,6 @@ Workday AI Autofiller is an AI-powered Chrome Extension designed to simplify and
 
 The extension allows users to upload a resume in PDF format, automatically extracts important information using Artificial Intelligence, stores the structured data locally, scans Workday application forms, intelligently matches resume data with form fields, and auto-fills the application.
 
-This project was built as part of a technical assessment focused on Chrome Extension Development, AI Integration, Dynamic Form Automation, and Resume Parsing.
 
 ---
 
